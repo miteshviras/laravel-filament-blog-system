@@ -6,12 +6,8 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
 use Filament\PanelProvider;
-use Filament\Pages\Dashboard;
-use Filament\Navigation\MenuItem;
 use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
 use Awcodes\LightSwitch\Enums\Alignment;
-use Filament\Widgets\FilamentInfoWidget;
 use Awcodes\LightSwitch\LightSwitchPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
@@ -23,8 +19,6 @@ use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
-use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
-use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -37,8 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->plugins([
                 LightSwitchPlugin::make()
-                    ->position(Alignment::BottomCenter),
-                    $this->getEditProfileModule()
+                ->position(Alignment::BottomCenter),
             ])
             ->colors([
                 'primary' => Color::Amber,
@@ -66,29 +59,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])
-            ->userMenuItems([
-                'profile' => MenuItem::make()
-                    ->label(fn() => auth()->user()->name)
-                    ->url(fn(): string => EditProfilePage::getUrl())
-                    ->icon('heroicon-m-user-circle')
-
-            ])
-        ;
-    }
-
-    protected function getEditProfileModule()
-    {
-        return FilamentEditProfilePlugin::make()
-            ->slug('profile')
-            ->setTitle('My Profile')
-            ->setNavigationLabel('My Profile')
-            ->setNavigationGroup('Group Profile')
-            ->setIcon('heroicon-o-user')
-            ->setSort(10)
-            ->shouldRegisterNavigation(false)
-            ->shouldShowDeleteAccountForm(false)
-            ->shouldShowBrowserSessionsForm()
-            ->shouldShowAvatarForm();
+            ]);
     }
 }
