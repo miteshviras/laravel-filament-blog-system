@@ -21,11 +21,15 @@ class Post extends Model
             'deleted_at' => 'datetime',
         ];
     }
+    const DIFFICULTY_LEVELS = ['Beginner', 'Intermediate', 'Advanced'];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    const DIFFICULTY_LEVELS = ['Beginner', 'Intermediate', 'Advanced'];
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, PostCategory::class, 'post_id', 'id');
+    }
 }
