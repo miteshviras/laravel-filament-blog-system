@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('thumbnail', $strLength * 3)->nullable();
             $table->boolean('is_published')->default(true);
             $table->datetime('published_at')->nullable();
+            $table->datetime('deleted_at')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete()->constrained();
