@@ -38,7 +38,7 @@ class PostResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form->schema([self::formLayout($form->getLivewire()->record)]);
+        return $form->schema(self::formSchema($form->getLivewire()->record));
     }
 
     public static function table(Table $table): Table
@@ -84,11 +84,11 @@ class PostResource extends Resource
             ]);
     }
 
-    public static function formLayout(?Post $post = null)
+    public static function formSchema(?Post $post = null)
     {
         $categoryOptions = Category::active()->limit(10)->pluck('name', 'id')->toArray();
         $strLength = 256;
-        return Grid::make([
+        return [Grid::make([
             'default' => 1,
         ])
             ->schema([
@@ -110,7 +110,7 @@ class PostResource extends Resource
                             ->fileAttachmentsDirectory('attachments')
                             ->required(),
 
-                    ])->grow(true),
+                    ]),
                     Section::make([
                         Select::make('categories')
                             ->multiple()
@@ -135,14 +135,14 @@ class PostResource extends Resource
                         DateTimePicker::make('updated_at')->disabled(),
                         Hidden::make('user_id')->default(auth()->id()),
                     ])->grow(false),
-                ])->from('md')
-            ]);
+                ])->from('xl')
+            ])];
     }
 
     public static function tableSchema(): array
     {
         return [
-            TextColumn::make('id', '#'),
+            TextColumn::make('id')->label('#'),
             TextColumn::make('title', 'Title')->limit(30)->searchable(),
             TextColumn::make('categories.name')->limit(25)->searchable(),
             TextColumn::make('user.name')->label('Created By')->limit(25)->searchable(),

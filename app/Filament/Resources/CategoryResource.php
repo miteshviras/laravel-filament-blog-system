@@ -32,15 +32,16 @@ class CategoryResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                self::formLayout()
-            ]);
+            ->schema(
+                self::formSchema()
+            );
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
+                TextColumn::make('id')->label('#'),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
@@ -85,10 +86,10 @@ class CategoryResource extends Resource
         ];
     }
 
-    public static function formLayout()
+    public static function formSchema()
     {
         $strLength = 256;
-        return Grid::make([
+        return [Grid::make([
             'default' => 1,
         ])
             ->schema([
@@ -107,6 +108,6 @@ class CategoryResource extends Resource
                         DateTimePicker::make('updated_at')->disabled(),
                     ])->grow(false),
                 ])->from('md')
-            ]);
+            ])];
     }
 }

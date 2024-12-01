@@ -24,6 +24,7 @@ class User extends Authenticatable implements HasAvatar
         'name',
         'email',
         'password',
+        'email_verified_at',
         'is_admin',
         'is_active',
     ];
@@ -59,7 +60,8 @@ class User extends Authenticatable implements HasAvatar
         return $this->avatar_url ? Storage::url("$this->avatar_url") : null;
     }
 
-    public function scopeAdmin($query){
+    public function scopeAdmin($query)
+    {
         return $query->where('is_admin', true);
     }
 }
