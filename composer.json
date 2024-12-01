@@ -9,6 +9,7 @@
         "php": "^8.2",
         "awcodes/light-switch": "^1.0",
         "filament/filament": "3.2.127",
+        "filament/forms": "^3.2",
         "filament/tables": "^3.2",
         "joaopaulolndev/filament-edit-profile": "^1.0",
         "laravel/framework": "^11.31",

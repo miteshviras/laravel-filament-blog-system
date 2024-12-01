@@ -18,6 +18,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\CategoryResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\CategoryResource\RelationManagers;
@@ -47,11 +48,13 @@ class CategoryResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->dateTime(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->dateTime(),
             ])
             ->filters([
                 //
@@ -99,9 +102,9 @@ class CategoryResource extends Resource
                         textarea::make('description')->maxLength($strLength * 2)->nullable(),
                     ]),
                     Section::make([
-                        Toggle::make('is_active')->default(true),
-                        TextInput::make('created_at')->disabled(),
-                        TextInput::make('updated_at')->disabled()
+                        Toggle::make('is_active')->label('Active')->default(true),
+                        DateTimePicker::make('created_at')->disabled(),
+                        DateTimePicker::make('updated_at')->disabled(),
                     ])->grow(false),
                 ])->from('md')
             ]);
