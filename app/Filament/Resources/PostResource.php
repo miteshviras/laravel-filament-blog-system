@@ -45,6 +45,9 @@ class PostResource extends Resource
     {
         return $table
             ->columns(self::tableSchema())
+            ->modifyQueryUsing(fn(Builder $query) => $query->when(!auth()->user()->is_admin, function ($internalQuery) {
+                $internalQuery->where('user_id', '=', auth()->id());;
+            }))
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
@@ -142,11 +145,11 @@ class PostResource extends Resource
     public static function tableSchema(): array
     {
         return [
-            TextColumn::make('id')->label('#'),
+            TextColumn::make('id')->label('#')->sortable(),
             TextColumn::make('title', 'Title')->limit(30)->searchable(),
             TextColumn::make('categories.name')->limit(25)->searchable(),
             TextColumn::make('user.name')->label('Created By')->limit(25)->searchable(),
-            ToggleColumn::make('is_published')->label('Published'),
+            ToggleColumn::make('is_published')->label('Published')->sortable(),
             TextColumn::make('created_at', 'Created At')->toggleable(isToggledHiddenByDefault: true)->dateTime(),
             TextColumn::make('updated_at', 'Updated At')->toggleable(isToggledHiddenByDefault: true)->dateTime(),
         ];

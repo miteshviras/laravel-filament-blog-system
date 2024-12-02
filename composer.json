@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "awcodes/light-switch": "^1.0",
+        "barryvdh/laravel-debugbar": "^3.14",
         "filament/filament": "3.2.127",
         "filament/forms": "^3.2",
         "filament/tables": "^3.2",

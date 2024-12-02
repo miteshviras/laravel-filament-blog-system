@@ -39,17 +39,17 @@ class UserResource extends Resource
         return $table
             ->modifyQueryUsing(fn(Builder $query) => $query->where('id','!=',auth()->id()))
             ->columns([
-                TextColumn::make('id')->label('#'),
+                TextColumn::make('id')->label('#')->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
-                    ->searchable(),
+                    ->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->label('Email Verified')
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_active')
-                    ->boolean()->label('Active'),
+                    ->boolean()->label('Active')->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
