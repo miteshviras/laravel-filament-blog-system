@@ -37,7 +37,7 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn(Builder $query) => $query->where('id','!=',auth()->id()))
+            ->modifyQueryUsing(fn(Builder $query) => $query->where('id', '!=', auth()->id()))
             ->columns([
                 TextColumn::make('id')->label('#'),
                 Tables\Columns\TextColumn::make('name')
@@ -88,7 +88,7 @@ class UserResource extends Resource
 
     public static function formSchema(?User $user = null): array
     {
-        $strLength = 256;
+        $strLength = config('custom.string_length');
         $section1 = [
             TextInput::make('name')
                 ->required()
