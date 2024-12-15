@@ -64,4 +64,8 @@ class User extends Authenticatable implements HasAvatar
     {
         return $query->where('is_admin', true);
     }
+
+    public function scopeActive($query){
+        return $query->where('is_active', true);
+    }
 }

@@ -88,7 +88,7 @@ class CategoryResource extends Resource
 
     public static function formSchema()
     {
-        $strLength = 256;
+        $strLength = config('custom.string_length');
         return [Grid::make([
             'default' => 1,
         ])

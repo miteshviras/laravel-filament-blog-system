@@ -37,13 +37,18 @@ class Post extends Model
         return $this->belongsToMany(Category::class, 'post_categories', 'post_id');
     }
 
-     /**
+    /**
      * Get the user's first name.
      */
     protected function categoryIds(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->categories()->pluck('categories.id')->toArray(),
+            get: fn() => $this->categories()->pluck('categories.id')->toArray(),
         );
+    }
+
+    public function scopeByUser($query)
+    {
+        return $query->when(!auth()->user()->is_admin, fn($q) => $q->where('user_id', auth()->id()));
     }
 }

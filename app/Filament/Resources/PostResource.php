@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use App\Models\Post;
+use App\Models\User;
 use Filament\Tables;
 use Filament\Forms\Set;
 use App\Models\Category;
@@ -17,8 +18,8 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Section;
-use function Laravel\Prompts\textarea;
 
+use function Laravel\Prompts\textarea;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -44,6 +45,7 @@ class PostResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn(Builder $query) => $query->byUser())
             ->columns(self::tableSchema())
             ->modifyQueryUsing(fn(Builder $query) => $query->when(!auth()->user()->is_admin, function ($internalQuery) {
                 $internalQuery->where('user_id', '=', auth()->id());;
@@ -90,7 +92,55 @@ class PostResource extends Resource
     public static function formSchema(?Post $post = null)
     {
         $categoryOptions = Category::active()->limit(10)->pluck('name', 'id')->toArray();
-        $strLength = 256;
+        $strLength = config('custom.string_length');
+        $userOptions = User::active()->where('is_admin', false)->limit(10)->pluck('name', 'id')->toArray();
+
+        $section2 = [
+            Select::make('categories')
+                ->multiple()
+                ->searchable()
+                ->required()
+                ->label('Categories')
+                ->options($categoryOptions)
+                ->relationship(titleAttribute: 'name')
+                ->getSearchResultsUsing(
+                    fn(string $search): array =>
+                    Category::active()
+                        ->where('name', 'like', "%{$search}%")
+                        ->limit(10)
+                        ->pluck('name', 'id')
+                        ->toArray()
+                )
+                ->preload(),
+            TextInput::make('duration')->placeholder('eg: 2 hours')->maxLength($strLength)->nullable(),
+            Select::make('difficulty_level')->options(Post::DIFFICULTY_LEVELS),
+            Toggle::make('is_published')->default(true),
+            DateTimePicker::make('created_at')->disabled(),
+            DateTimePicker::make('updated_at')->disabled(),
+        ];
+
+        auth()->user()->is_admin ? array_unshift($section2, Select::make('user_id')
+            ->searchable()
+            ->required()
+            ->label('User')
+            ->options($userOptions)
+            ->getSearchResultsUsing(
+                fn(string $search): array =>
+                User::where('is_admin', false)
+                    ->where('is_active', true)
+                    ->where(function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    })
+                    ->limit(10)
+                    ->pluck('name', 'id')
+                    ->toArray()
+            )
+            ->preload()) : array_push(
+            $section2,
+            Hidden::make('user_id')->default(auth()->id()),
+        );
+
         return [Grid::make([
             'default' => 1,
         ])
@@ -114,30 +164,7 @@ class PostResource extends Resource
                             ->required(),
 
                     ]),
-                    Section::make([
-                        Select::make('categories')
-                            ->multiple()
-                            ->searchable()
-                            ->required()
-                            ->label('Categories')
-                            ->options($categoryOptions)
-                            ->relationship(titleAttribute: 'name')
-                            ->getSearchResultsUsing(
-                                fn(string $search): array =>
-                                Category::active()
-                                    ->where('name', 'like', "%{$search}%")
-                                    ->limit(10)
-                                    ->pluck('name', 'id')
-                                    ->toArray()
-                            )
-                            ->preload(),
-                        TextInput::make('duration')->placeholder('eg: 2 hours')->maxLength($strLength)->nullable(),
-                        Select::make('difficulty_level')->options(Post::DIFFICULTY_LEVELS),
-                        Toggle::make('is_published')->default(true),
-                        DateTimePicker::make('created_at')->disabled(),
-                        DateTimePicker::make('updated_at')->disabled(),
-                        Hidden::make('user_id')->default(auth()->id()),
-                    ])->grow(false),
+                    Section::make($section2)->grow(false),
                 ])->from('xl')
             ])];
     }
