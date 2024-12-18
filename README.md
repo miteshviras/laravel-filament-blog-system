@@ -2,6 +2,12 @@
 
 Filament is a collection of tools for rapidly building beautiful TALL stack (Tailwind CSS, Alpine.js, Laravel, Livewire) applications. It provides a set of components and utilities to help you build modern web applications with ease.
 
+## Support the Project
+
+If you find this project helpful, consider supporting me by buying me a coffee!
+
+[![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/miteshviras329)
+
 ## System Requirements
 
 Before installing Filament, ensure your server meets the following requirements:
@@ -79,5 +85,3 @@ The Filament framework is open-sourced software licensed under the [MIT license]
 ## Author
 
 For more information about the author, visit [miteshviras.vercel.app](https://miteshviras.vercel.app).
-
-[![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/miteshviras329)
