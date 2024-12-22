@@ -12,11 +12,11 @@ If you find this project helpful, consider supporting me by buying me a coffee!
 
 Before installing Filament, ensure your server meets the following requirements:
 
-- PHP >= 8.2
-- Composer
-- Laravel >= 11.0
-- Node.js & NPM (for frontend assets)
-- A database (MySQL, PostgreSQL, SQLite, etc.)
+-   PHP >= 8.2
+-   Composer
+-   Laravel >= 11.0
+-   Node.js & NPM (for frontend assets)
+-   A database (MySQL, PostgreSQL, SQLite, etc.)
 
 ## Installation
 
@@ -50,6 +50,12 @@ To get started with Filament, follow these steps:
 
     ```bash
     php artisan serve
+    ```
+
+6. **Create Admin User**: execute below given command to create admin user.
+
+    ```bash
+    php artisan user:make-admin-user
     ```
 
 You can now access the Filament admin panel by navigating to `/admin` in your browser.
