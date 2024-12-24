@@ -58,6 +58,12 @@ To get started with Filament, follow these steps:
     php artisan user:make-admin-user
     ```
 
+7. **Create Storage Link**: Execute the command below to create a symbolic link from `public/storage` to `storage/app/public`.
+
+    ```bash
+    php artisan storage:link
+    ```
+
 You can now access the Filament admin panel by navigating to `/admin` in your browser.
 
 ## Building for Production
